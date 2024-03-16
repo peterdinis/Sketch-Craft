@@ -1,5 +1,6 @@
 import { CursorChatProps, CursorMode } from '@/types/cursorTypes';
 import CursorSVG from './CursorSVG';
+import { ChangeEvent, KeyboardEvent } from 'react';
 
 const CursorChat = ({
     cursor,
@@ -7,7 +8,7 @@ const CursorChat = ({
     setCursorState,
     updateMyPresence,
 }: CursorChatProps) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
         updateMyPresence({ message: e.target.value });
         setCursorState({
             mode: CursorMode.Chat,
@@ -16,7 +17,7 @@ const CursorChat = ({
         });
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e:KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             setCursorState({
                 mode: CursorMode.Chat,
