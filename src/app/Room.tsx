@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { ReactNode } from "react";
-import { ClientSideSuspense } from "@liveblocks/react";
-import { RoomProvider } from "../../liveblocks.config";
+import { ReactNode } from 'react';
+import { ClientSideSuspense } from '@liveblocks/react';
+import { RoomProvider } from '../../liveblocks.config';
 
 export function Room({ children }: { children: ReactNode }) {
-  return (
-    <RoomProvider id="my-room" initialPresence={{}}>
-      <ClientSideSuspense fallback={<div>Loading…</div>}>
-        {() => children}
-      </ClientSideSuspense>
-    </RoomProvider>
-  );
+    return (
+        <RoomProvider id='my-room' initialPresence={{}}>
+            <ClientSideSuspense fallback={<div>Loading…</div>}>
+                {() => children}
+            </ClientSideSuspense>
+        </RoomProvider>
+    );
 }

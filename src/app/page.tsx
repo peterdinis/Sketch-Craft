@@ -1,8 +1,7 @@
-import { NextPage } from "next";
+import HeroWrapper from '@/components/hero/HeroWrapper';
+import { NextPage } from 'next';
 const Homepage: NextPage = () => {
-  return (
-    <h1>roror</h1>
-  )
-}
+    return <HeroWrapper />;
+};
 
 export default Homepage;
