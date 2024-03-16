@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, PointerEvent, useCallback, useState } from 'react';
+import { FC, PointerEvent, useCallback, useEffect, useState } from 'react';
 import { useMyPresence, useOthers } from '../../../../liveblocks.config';
 import LiveCursors from './LiveCursors';
 import CursorChat from './CursorChat';
@@ -24,7 +24,6 @@ const LiveCursor: FC = () => {
 
     const handlePointerDown = useCallback(
         (event: React.PointerEvent) => {
-            // get the cursor position in the canvas
             const x =
                 event.clientX - event.currentTarget.getBoundingClientRect().x;
             const y =
@@ -36,8 +35,6 @@ const LiveCursor: FC = () => {
                     y,
                 },
             });
-
-            // if cursor is in reaction mode, set isPressed to true
             setCursorState((state: CursorState) =>
                 cursorState.mode === CursorMode.Reaction
                     ? { ...state, isPressed: true }
@@ -47,7 +44,6 @@ const LiveCursor: FC = () => {
         [cursorState.mode, setCursorState],
     );
 
-    // hide the cursor when the mouse is up
     const handlePointerUp = useCallback(() => {
         setCursorState((state: CursorState) =>
             cursorState.mode === CursorMode.Reaction
@@ -56,11 +52,43 @@ const LiveCursor: FC = () => {
         );
     }, [cursorState.mode, setCursorState]);
 
+    useEffect(() => {
+        const onKeyUp = (e: KeyboardEvent) => {
+            if (e.key === '/') {
+                setCursorState({
+                    mode: CursorMode.Chat,
+                    previousMessage: null,
+                    message: '',
+                });
+            } else if (e.key === 'Escape') {
+                updateMyPresence({ message: '' });
+                setCursorState({ mode: CursorMode.Hidden });
+            } else if (e.key === 'e') {
+                setCursorState({ mode: CursorMode.ReactionSelector });
+            }
+        };
+
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === '/') {
+                e.preventDefault();
+            }
+        };
+
+        window.addEventListener('keyup', onKeyUp);
+        window.addEventListener('keydown', onKeyDown);
+
+        return () => {
+            window.removeEventListener('keyup', onKeyUp);
+            window.removeEventListener('keydown', onKeyDown);
+        };
+    }, [updateMyPresence]);
+
     return (
         <div
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerMove}
             onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
             className='border-5 border-green-600'
         >
             {cursor && (

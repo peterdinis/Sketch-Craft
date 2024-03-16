@@ -55,7 +55,7 @@ const CursorChat = ({
                             <div>{cursorState.previousMessage}</div>
                         )}
                         <Input
-                            className='z-10 w-60 border-none	bg-transparent text-white placeholder-blue-300 outline-none'
+                            className='z-10 w-60 border-none bg-transparent text-white placeholder-blue-300 outline-none'
                             autoFocus={true}
                             onChange={handleChange}
                             onKeyDown={handleKeyDown}
