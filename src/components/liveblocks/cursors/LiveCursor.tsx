@@ -4,22 +4,24 @@ import { FC, PointerEvent, useCallback, useEffect, useState } from 'react';
 import { useMyPresence, useOthers } from '../../../../liveblocks.config';
 import LiveCursors from './LiveCursors';
 import CursorChat from './CursorChat';
-import { CursorMode, CursorState } from '@/types/cursorTypes';
+import { CursorMode, CursorState, Reaction } from '@/types/cursorTypes';
+import ReactionSelector from '../reactions/ReactionButton';
 
 const LiveCursor: FC = () => {
     const others = useOthers();
     const [{ cursor }, updateMyPresence] = useMyPresence() as any;
-
+    const [reactions, setReactions] = useState<Reaction[]>([]);
     const [cursorState, setCursorState] = useState<CursorState>({
         mode: CursorMode.Hidden,
     });
     const handlePointerMove = useCallback((event: PointerEvent) => {
         event.preventDefault();
-
-        const x = event.clientX - event.currentTarget.getBoundingClientRect().x;
-        const y = event.clientY - event.currentTarget.getBoundingClientRect().y;
-
-        updateMyPresence({ cursor: { x, y } });
+        
+        if(cursor === null || cursorState.mode !== CursorMode.ReactionSelector) {
+            const x = event.clientX - event.currentTarget.getBoundingClientRect().x;
+            const y = event.clientY - event.currentTarget.getBoundingClientRect().y;
+            updateMyPresence({ cursor: { x, y } });
+        }
     }, []);
 
     const handlePointerDown = useCallback(
@@ -98,6 +100,12 @@ const LiveCursor: FC = () => {
                     setCursorState={setCursorState}
                     updateMyPresence={updateMyPresence}
                 />
+            )}
+
+            {cursorState.mode === CursorMode.ReactionSelector && (
+                <ReactionSelector setReaction={(reaction: any) => {
+                    setReactions(reaction);
+                }} />
             )}
 
             <LiveCursors others={others} />
