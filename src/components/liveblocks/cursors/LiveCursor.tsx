@@ -6,6 +6,7 @@ import LiveCursors from './LiveCursors';
 import CursorChat from './CursorChat';
 import { CursorMode, CursorState, Reaction } from '@/types/cursorTypes';
 import ReactionSelector from '../reactions/ReactionButton';
+import FlyingReaction from '../reactions/FlyingReactionButton';
 
 const LiveCursor: FC = () => {
     const others = useOthers();
@@ -96,8 +97,21 @@ const LiveCursor: FC = () => {
             onPointerLeave={handlePointerMove}
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
-            className='border-5 border-green-600'
-        >
+            className='h-100[vh] w-full flex justify-center items-center text-center'
+        >   
+
+            <h1 className='text-2xl text-white'>Sketch Craft</h1>
+
+            {reactions.map((r) => {
+                <FlyingReaction 
+                    key={r.timestamp.toString()}
+                    x={r.point.x}
+                    y={r.point.y}
+                    timestamp={r.timestamp}
+                    value={r.value}
+
+                />
+            })}
             {cursor && (
                 <CursorChat
                     cursor={cursor}
