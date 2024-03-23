@@ -1,14 +1,19 @@
 'use client';
 
 import { FC, PointerEvent, useCallback, useEffect, useState } from 'react';
-import { useBroadcastEvent, useEventListener, useMyPresence, useOthers } from '../../../../liveblocks.config';
+import {
+    useBroadcastEvent,
+    useEventListener,
+    useMyPresence,
+    useOthers,
+} from '../../../../liveblocks.config';
 import LiveCursors from './LiveCursors';
 import CursorChat from './CursorChat';
 import { CursorMode, CursorState, Reaction } from '@/types/cursorTypes';
 import ReactionSelector from '../reactions/ReactionButton';
 import FlyingReaction from '../reactions/FlyingReactionButton';
 import useInterval from '@/hooks/useInterval';
-import {format} from "date-fns";
+import { format } from 'date-fns';
 
 const LiveCursor: FC = () => {
     const others = useOthers();
@@ -20,39 +25,49 @@ const LiveCursor: FC = () => {
 
     const brodcast = useBroadcastEvent();
 
-    useInterval(() =>{
-        setReactions((reactions) => reactions.filter((r) => {
-            r.timestamp >Date.now() - 4000
-        }))
-    }, 1000);   
+    useInterval(() => {
+        setReactions((reactions) =>
+            reactions.filter((r) => {
+                r.timestamp > Date.now() - 4000;
+            }),
+        );
+    }, 1000);
 
     useInterval(() => {
-        if(cursorState.mode === CursorMode.Reaction && cursor && cursorState.isPressed) {
-            setReactions((reactions) => reactions.concat([
-                {
-                    point: {x: cursor.x, y: cursor.y},
-                    value: cursorState.reaction,
-                    timestamp: format(new Date(), 'yyyy-MM-dd') as any,
-                }
-            ]))
+        if (
+            cursorState.mode === CursorMode.Reaction &&
+            cursor &&
+            cursorState.isPressed
+        ) {
+            setReactions((reactions) =>
+                reactions.concat([
+                    {
+                        point: { x: cursor.x, y: cursor.y },
+                        value: cursorState.reaction,
+                        timestamp: format(new Date(), 'yyyy-MM-dd') as any,
+                    },
+                ]),
+            );
             brodcast({
                 x: cursor.x,
                 y: cursor.y,
-                value: cursorState.reaction
+                value: cursorState.reaction,
             });
         }
     }, 500);
 
     useEventListener((eventD) => {
         const event = eventD as any;
-        setReactions((reactions) => reactions.concat([
-            {
-                point: {x: event.x!, y: event.y!},
-                value: event.value,
-                timestamp: format(new Date(), 'yyyy-MM-dd') as any,
-            }
-        ]))
-    })
+        setReactions((reactions) =>
+            reactions.concat([
+                {
+                    point: { x: event.x!, y: event.y! },
+                    value: event.value,
+                    timestamp: format(new Date(), 'yyyy-MM-dd') as any,
+                },
+            ]),
+        );
+    });
 
     const handlePointerMove = useCallback((event: PointerEvent) => {
         event.preventDefault();
@@ -137,19 +152,17 @@ const LiveCursor: FC = () => {
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
             className='h-100[vh] w-full flex justify-center items-center text-center'
-        >   
-
+        >
             <h1 className='text-2xl text-white'>Sketch Craft</h1>
 
             {reactions.map((r) => {
-                <FlyingReaction 
+                <FlyingReaction
                     key={r.timestamp.toString()}
                     x={r.point.x}
                     y={r.point.y}
                     timestamp={r.timestamp}
                     value={r.value}
-
-                />
+                />;
             })}
             {cursor && (
                 <CursorChat
