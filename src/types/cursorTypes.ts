@@ -15,7 +15,7 @@ export type Reaction = {
     value: string;
     timestamp: number;
     point: { x: number; y: number };
-  };
+};
 
 export type CursorState =
     | {
