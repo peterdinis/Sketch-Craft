@@ -18,3 +18,5 @@ const Avatar: FC<IAvatarProps> = ({ src, name }: IAvatarProps) => {
         </div>
     );
 };
+
+export default Avatar;
