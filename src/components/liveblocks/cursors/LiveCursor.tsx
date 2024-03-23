@@ -16,7 +16,7 @@ const LiveCursor: FC = () => {
     });
     const handlePointerMove = useCallback((event: PointerEvent) => {
         event.preventDefault();
-        
+
         if(cursor === null || cursorState.mode !== CursorMode.ReactionSelector) {
             const x = event.clientX - event.currentTarget.getBoundingClientRect().x;
             const y = event.clientY - event.currentTarget.getBoundingClientRect().y;
@@ -102,11 +102,13 @@ const LiveCursor: FC = () => {
                 />
             )}
 
-            {cursorState.mode === CursorMode.ReactionSelector && (
-                <ReactionSelector setReaction={(reaction: any) => {
-                    setReactions(reaction);
-                }} />
-            )}
+{cursorState.mode === CursorMode.ReactionSelector && (
+          <ReactionSelector
+            setReaction={(reaction: any) => {
+              setReactions(reaction);
+            }}
+          />
+        )}
 
             <LiveCursors others={others} />
         </div>
