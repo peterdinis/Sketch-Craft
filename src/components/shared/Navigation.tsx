@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { NavbarProps } from '@/types/navbarTypes';
+import { ActiveElement, NavbarProps } from '@/types/navbarTypes';
 import ActiveUsers from '../liveblocks/users/ActiveUsers';
 
 const Navigation: FC<NavbarProps> = ({
@@ -8,6 +8,11 @@ const Navigation: FC<NavbarProps> = ({
     handleImageUpload,
     handleActiveElement,
 }) => {
+    const isActive = (value: string | Array<ActiveElement>) =>
+    (activeElement && activeElement.value === value) ||
+    (Array.isArray(value) && value.some((val) => val?.value === activeElement?.value));
+
+    
     return (
         <>
             <nav className='flex select-none items-center justify-between gap-4 bg-primary-black px-5 text-white'>
